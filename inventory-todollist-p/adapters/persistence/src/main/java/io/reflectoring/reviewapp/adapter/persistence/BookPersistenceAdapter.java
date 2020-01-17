@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class BookPersistenceAdapter implements FindBookByTitlePort, PersistBookPort {
 
-  private final BookRepository bookRepository;
+  private final BookLibRepository bookRepository;
 
   @Override
   public Optional<Book> findBookByTitle(String title) {

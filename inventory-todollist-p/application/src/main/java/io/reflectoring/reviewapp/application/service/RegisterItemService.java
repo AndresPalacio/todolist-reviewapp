@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterBookService implements RegisterBookUseCase {
+public class RegisterItemService implements RegisterBookUseCase {
 
   private final FindAuthorByIdPort findAuthorByIdPort;
   private final FindBookByTitlePort findBookByTitlePort;
@@ -19,18 +19,17 @@ public class RegisterBookService implements RegisterBookUseCase {
 
   @Override 
   public void registerBook(RegisterBookCommand command) {
-	
-	/**
+
     Author author = findAuthorByIdPort.findAuthorById(command.getAuthorId());
 
     requireUniqueTitle(command.getBookTitle());
     requireAuthorHasPremiumAccount(author);
 
     // more business validations ...
-	**/
-    Book book = new Book(command.getAuthorId(), command.getBookTitle(),command.getAuthorId());
+
+    Book book = new Book(null, command.getBookTitle(), author.getId());
     saveBookPort.saveBook(book);
-  }	
+  }
 
   private void requireAuthorHasPremiumAccount(Author author) {
     // some business validation ...

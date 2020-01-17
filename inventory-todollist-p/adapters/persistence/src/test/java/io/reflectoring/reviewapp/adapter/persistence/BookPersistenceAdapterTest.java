@@ -20,7 +20,7 @@ class BookPersistenceAdapterTest {
   private BookPersistenceAdapter bookPersistenceAdapter;
 
   @Autowired
-  private BookRepository bookRepository;
+  private BookLibRepository bookRepository;
 
   @Test
   @SqlGroup({
