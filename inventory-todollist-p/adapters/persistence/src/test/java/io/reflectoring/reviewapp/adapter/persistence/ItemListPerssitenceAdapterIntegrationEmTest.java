@@ -3,6 +3,7 @@ package io.reflectoring.reviewapp.adapter.persistence;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,16 +13,23 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 
 import io.reflectoring.reviewapp.domain.Item;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @AutoConfigurationPackage
 @DataMongoTest
-@Import(PersistenceAdapterConfiguration.class)
+@Import(PersistenceEmbeConfiguration.class)
+@RequiredArgsConstructor
 public class ItemListPerssitenceAdapterIntegrationEmTest {
+	
+	
 	@Mock
 	private ItemRepository itempersistenceAdapter;
 	
 	@Autowired
 	private ItemPersistenceAdapter itempersistenceAdapters;
+	
+
 	
 	@BeforeEach
 	public void setMock() {

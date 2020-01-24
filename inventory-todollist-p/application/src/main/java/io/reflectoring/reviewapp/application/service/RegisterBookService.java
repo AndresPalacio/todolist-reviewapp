@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterBookService implements RegisterBookUseCase {
 
-  private final FindAuthorByIdPort findAuthorByIdPort;
   private final FindBookByTitlePort findBookByTitlePort;
   private final PersistBookPort saveBookPort;
 
