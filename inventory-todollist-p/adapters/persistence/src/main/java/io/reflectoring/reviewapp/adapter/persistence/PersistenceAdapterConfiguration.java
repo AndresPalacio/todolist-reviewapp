@@ -20,7 +20,7 @@ import cz.jirutka.spring.embedmongo.EmbeddedMongoBuilder;
 @EnableJdbcRepositories
 @ComponentScan
 class PersistenceAdapterConfiguration extends JdbcConfiguration {
-
+	
 	@Bean
 	NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
 		return new NamedParameterJdbcTemplate(dataSource);
