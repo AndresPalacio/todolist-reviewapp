@@ -23,25 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class ItemListPerssitenceAdapterIntegrationEmTest {
 	
 	
-	@Mock
-	private ItemRepository itempersistenceAdapter;
-	
 	@Autowired
 	private ItemPersistenceAdapter itempersistenceAdapters;
-	
-
-	
-	@BeforeEach
-	public void setMock() {
-		when(itempersistenceAdapter.save(new Item(12l, "tes", "test data"))).thenReturn(new Item(12L, "test title","test data"));
-	}	
-	
-	@Test
-	public void prueba() {
-		
-		
-	}
-	
 	
 	@Test
 	public void prueba1() {

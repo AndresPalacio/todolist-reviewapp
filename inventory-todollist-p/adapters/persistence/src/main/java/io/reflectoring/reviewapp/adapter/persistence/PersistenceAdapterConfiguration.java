@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @ComponentScan
 @EnableJdbcRepositories
-class PersistenceAdapterConfiguration extends JdbcConfiguration {
+public class PersistenceAdapterConfiguration extends JdbcConfiguration {
 	
 	@Bean
 	NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
