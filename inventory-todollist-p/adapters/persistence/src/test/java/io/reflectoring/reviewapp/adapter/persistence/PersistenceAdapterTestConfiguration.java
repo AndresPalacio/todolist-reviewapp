@@ -1,9 +1,10 @@
 package io.reflectoring.reviewapp.adapter.persistence;
 
+import org.junit.runner.RunWith;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @SpringBootConfiguration
-@Import(PersistenceAdapterConfiguration.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 class PersistenceAdapterTestConfiguration {
 }
