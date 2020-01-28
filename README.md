@@ -22,11 +22,40 @@ gradle build
 
 ### Analisis del proyecto 🔩
 
-_Titulo
+_Comandos docker 
 
 ```
-Ejemplo
+
+docker-compose up 
+
+borrar con datos del volumen 
+
+docker-compose down -v 
+
+En caso de error
+
+docker volume prune 
+
+
 ```
+
+_Autenticacion de en base de datos docker-compose 
+
+```
+docker exec -it <container-name> bash
+
+mongo -u <your username> -p <your password> --authenticationDatabase <your database name>
+
+OR
+
+Este proyecto:
+
+mongo -u <your username> --authenticationDatabase <your database name>
+
+```
+
+
+
 
 ### Arquitectura y  pruebas de estilo de codificación ⌨️
 
