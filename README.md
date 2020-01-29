@@ -98,12 +98,214 @@ Un ejemplo seria:
 
 Pruebas de integracion mediante : base de datos embebidas o testcontainer para una correcta interaccio la base de datos
 
+* Cuando un componente interactua con otros y se desea hacer pruebas unitarias mas fieles a probar el codigo del metodo y no la integracion con otros metodos se utilizan objetos falsos test doubles
+
+Se clasifican en : 
+
+
+```
+
+– Dummy: Son objetos que se envían, pero nunca se utilizan en el test.
+Por ejemplo, imaginemos que tenemos un objeto de la clase GestorDeTareas, que gestiona objetos Tarea, que necesita una lista de parámetros Tarea para funcionar. Si en el test solo queremos comprobar que uno de sus métodos me devuelva el número de Tareas que contiene ese gestor de tareas, podemos utilizar dummies para rellenar el gestor de tareas. Muchas veces los dummies se rellenan con valores NULL.
+– Stub: Es un objeto en el que configuras que cuando llames a un método devuelva un valor determinado. Por ejemplo, si tienes un objeto con un método que suma dos números, un stub sería un objeto que independientemente de los valores que le pases al método suma, devuelva 5.
+– Spy: Estos objetos guardan las acciones que se hacen sobre ellos. Hace una especie de seguimiento sobre qué métodos se han llamado y con qué parámetros.
+Cuando para que un test sea un éxito no es suficiente ver el estado de los objetos disponibles, podemos usar un spy y comprobar cosas como cuántas veces se ha llamado a un método, qué valores han devuelto, etc.
+– Mock: Muy similar a un spy, pero no solo guardan las acciones que se hacen sobre ellos, también es necesario configurar qué comportamiento esperas cuando alguien llame a alguno de sus métodos.
+– Fake: Es un objeto que implementado completamente y que funciona, como un objeto normal sin ser simulado, pero se diferencia en que está falseando algo para hacer alguna cosa más fácil de probar. Un ejemplo de esto podría ser un objeto que utiliza una base de datos en memoria en lugar de acceder a consultar la base de datos de producción.
+
+
+```
+Pero los mas utilizados podrian ser los Spy y mock
+
+
+Spy
+
+Se puede utilizar para simular parcialmente un objeto, esto es util cuando se desea burlar parcialmente el comportamiento de una clase, un ejemplo comun es un servicio que hace el llamado una base de datos y realiza otra operacion de otro servicio, en este caso se burlaria la conexion a la base de datos pero no el llamado al otro servicio
+
+
+En otro caso el @Mock nos permite indicarle que metodos se comportaran de una manera al ser llamados 
+en otro componente esto lo logramos mediante el metodo 
+
+Un Spy es como un Mock. La diferencia es que, si queremos, puede funcionar como un objeto real y llamará a las implementaciones de los métodos reales. Tambien tenemos la opción podemos simular la funcionalidad de cualquier método, como con el Mock.
+
+```
+
+@Test
+public void whenITryToCutWaterThenFalse()
+{
+   Knife knife = spy( Knife.class );
+   doReturn( false ).when( knife ).cut( "water" );
+
+   assertEquals( knife.cut("water", false);
+}
+
+```
+
+Otro ejemplo
+
+
+```
+when().thenReturn();
+```
 
 
 
-### Arquitectura y  pruebas de estilo de codificación ⌨️
+Ejemplos: 
 
-_Explica que verifican estas pruebas y por qué_
+```
+public class GreetingsServiceTest {
+    @Mock
+    private UserServiceImpl userService; // this class will be mocked
+    @Spy
+    private AppServiceImpl appService; // this class WON'T be mocked
+    @InjectMocks
+    private GreetingsService greetingsService = new GreetingsService(userService, appService);
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+	// en este caso se mockearia el resultado de cuando se llame ese metodo 
+	// los servicios getFirstName y getLastName de acceso a datos 
+	// cuando se llamen retornaria John y Doe
+	// pero por contrario al aplicar Spy cuando se haga un llamado al metodo
+	// devolvera correctamente la llamada al servicio 
+
+    @Test
+    public void testGetGreetings_morning() throws Exception {
+        // specify mocked behavior
+        when(userService.getFirstName(99)).thenReturn("John");
+        when(userService.getLastName(99)).thenReturn("Doe");
+        // invoke method under test
+        String greetings = greetingsService.getGreetings(99, LocalTime.of(0, 45));
+        Assert.assertEquals("Failed to get greetings!", "Good Morning, John Doe! Welcome to The Amazing Application.", greetings);
+    }
+
+    @Test
+    public void testGetGreetings_afternoon() throws Exception {
+        // specify mocked behavior
+        when(userService.getFirstName(11)).thenReturn("Jane");
+        when(userService.getLastName(11)).thenReturn("Doe");
+        // invoke method under test
+        String greetings = greetingsService.getGreetings(11, LocalTime.of(13, 15));
+        Assert.assertEquals("Failed to get greetings!", "Good Afternoon, Jane Doe! Welcome to The Amazing Application.", greetings);
+    }
+}
+
+Otro ejemplo seria 
+@Spy
+private ArrayList spyArrayList;
+ 
+@Test
+public void spyTest() {
+    spyArrayList.add("Object 1");
+    spyArrayList.add("Object 2");
+    spyArrayList.add("Object 3");
+ 
+    assertEquals(3, spyArrayList.size());
+ 
+    when(spyArrayList.size()).thenReturn(20);
+    assertEquals(20, spyArrayList.size());
+}
+
+
+```
+Explicacion del metodo anterior :Donde podemos usar los metodos de ArrayList  sin embargo al final queremos generar un mock para cuando devuelva el tamaño, podriamos seguir utilizando el metodo get y demas 
+
+
+Nota: Spy mantendra los objetos originales y solo remplazara algunos metodos que deseemos cambiar, a esto se le conoce como partial mocking
+
+
+Mockito: 
+
+Razon por usar mockito, como ya habia dicho antes un test unitario debe probar un un componente aislado de nuestra aplicacion, los errores o efectos secundarios de otro componentes deben ser elimados 
+para aislar esos componentes de nuestras pruebas es mediante el uso de test doubles 
+
+
+esto nos asegura que las pruebas se ejecuten solo para  un componente
+asegurando que no tendran ningun efecto secundario de otra clase cuando sea llamado
+
+
+Definiciones necesarias:
+@RunWith(MockitoJUnitRunner.class) : Se utiliza para definir que se utilizará el Runner de Mockito para ejecutar nuestras pruebas.
+
+@InjectMocks <--- este sera la clase que contiene el metodo a probar y se desea inyectar mocks con unas respuestas al llamado de sus metodos
+
+@Mock <-- seran las clases que se llamaran dentro de ese metodo a probar y se desea crear un mock o por asi decirlo una simulacion de un metodo
+
+
+public class CalculatorServiceTest {
+    @InjectMocks
+    private CalculatorServiceImpl calculatorService;
+ 
+    @Mock
+    private DataService dataService;
+ 
+    @Test
+    public void testCalculateAvg_simpleInput() {
+        when(dataService.getListOfNumbers()).thenReturn(new int[] { 1, 2, 3, 4, 5 });
+        assertEquals(3.0, calculatorService.calculateAverage(), .01);
+    }
+
+}
+
+when(dataService.getListOfNumbers()).thenReturn(new int[] { 1, 2, 3, 4, 5 }) : Define que cuando se ejecute el método getListOfNumbers se devolverá el resultado new int[] { 1, 2, 3, 4, 5 }.
+
+
+Ahora la llamada a un metodo y la assercion solo hace una prueba de integracion pero si se deseea hacer una prueba
+unitaria fiel sin tener dependencia de otros componentes solo de ese metodo se necesita mocks
+
+
+Diferencia entre mock y spy
+
+Básicamente, la diferencia es que con Mock es obligatorio simular los comportamientos de los métodos. Los Mocks son muy usados cuando se programa haciendo TDD (Test Driven Development o Desarrollo basado en tests), ya que no requieren de que haya ninguna funcionalidad implementada. Sin embargo, Spy, aunque puede simular el comportamiento de los métodos al igual que Mock, también nos da la oportunidad de llamar a la implementación real de los métodos del objeto. Es usado cuando nos interesa mantener la consistencia de los métodos ya implementados con la nueva parte que estemos desarrollando y realizando TDD.
+
+
+
+
+Verify
+
+Al hacer una prueba unitaria, hace algunas afirmaciones para verificar la igualdad entre el resultado esperado y el resultado real 
+cuando se utiliza objetos simulados en la prueba unitaria, es posible que necesite verificar en mockito que el  objeto simulado se ha realizado metodos especificos
+
+Ejemplo
+
+
+```
+String addString = "nuevo";
+        mockList.add(addString);
+        
+        //verifica que el metodo add fue llamado con el argumento 'nuevo'
+
+        verify(mockList).add(addString);
+
+```
+
+Verificar que un metodo es llamado un numero de veces con un parametro
+String addString = "nuevo test";
+        mockList.add(addString);
+        mockList.add(addString);
+        mockList.add(addString);
+ 
+
+        verify(mockList, times(3)).add(addString);
+
+verifica que el metodo add fue llamado tres veces con el argumento nuevo test 
+
+### Pruebas Spring boot  ⌨️
+
+ * "spring-boot-starter-test" contiene: 
+
+JUnit — La librería de testing unitario básica en todos los proyectos java.
+Spring Test & Spring Boot Test —Algunas utilidades para testing de aplicaciones de Spring
+AssertJ — Librería para Asserts
+Hamcrest — Librería para crear matchers entre objetos
+Mockito — Framework para crear objetos simulados para pruebas
+JSONassert — Librería para realizar asserts sobre Json
+JsonPath — XPath para JSON.
+
+
 
 ```
 Da un ejemplo
