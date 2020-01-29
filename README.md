@@ -214,7 +214,7 @@ public void spyTest() {
 Explicacion del metodo anterior :Donde podemos usar los metodos de ArrayList  sin embargo al final queremos generar un mock para cuando devuelva el tamaño, podriamos seguir utilizando el metodo get y demas 
 
 
-Nota: Spy mantendra los objetos originales y solo remplazara algunos metodos que deseemos cambiar, a esto se le conoce como partial mocking
+Nota: Spy mantendra los objetos originales y solo remplazara algunos metodos que deseemos cambiar, a esto se le conoce como partial mocking coon el when de igual manera
 
 
 Mockito: 
@@ -306,10 +306,70 @@ JSONassert — Librería para realizar asserts sobre Json
 JsonPath — XPath para JSON.
 
 
+El uso de la anotacion @SpringBootTest
+Le indica a spring boot que configure un contexto completo de la aplicacion spring boot
+
+Nota: cuando se utiliza SpringbootTest
+
+Cuando una clase tiene la anotacion @Autowired debe ser probada usando la anotacion @SpringBootTest debido a que se necesita levantar el contexto para la ejecucion de la prueba.
+
+Ejemplo
 
 ```
-Da un ejemplo
+@Service
+public class RegistrarUsuario {
+
+  @Autowired
+  private UserRepository userRepository;
+
+  public User registerUser(User user) {
+    return userRepository.save(user);
+  }
+
+}
+
 ```
+De esta manera spring permite inyectar 
+
+Esta Inyeccion se puede hacer mediante constructor 
+
+```
+@Service
+public class RegisterUsuario {
+
+  private final UserRepository userRepository;
+
+  public RegisterUseCase(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public User registerUser(User user) {
+    return userRepository.save(user);
+  }
+
+}
+
+```
+
+Esto es inyeccion mediante constructor que permite pasar una instancia de UserRepository en la prueba unitaria y crear una instancia de ese tipo, como un test double y pasarla por constructor
+
+Nota: spring utilizara este constructor para crear las instancias, al crear el contexto de la aplicacion
+ 
+```
+En spring 5: se necesita agregar al constructor el @Autowired para spring encontrar el cosntructor
+```
+
+Es final porque el contenido del campo inyectado 
+
+
+Por lo anterior es recomendado usar @RequiredArgsConstructor de lombok esta anotacion permite
+que el constructor se genere automaticamente
+
+
+
+## Test de integracion
+
+
 
 ## Despliegue 📦
 
@@ -323,6 +383,49 @@ _Menciona las herramientas que utilizaste para crear tu proyecto_
 * [Gradle] - Manejador de dependencias
 * [Mockito]- Pruebas
 
+
+* Dependencias
+
+Pruebas con mockito
+```
+dependencies{
+  compileOnly('org.projectlombok:lombok')
+  testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+  testCompile('org.mockito:mockito-junit-jupiter:2.23.0')
+}
+
+```
+
+
+# Pruebas unitarias sin mockito 
+
+Se desea realizar una prueba a un servicio que contiene logica de negocio
+
+```
+class RegisterUseCaseTest {
+
+  private UserRepository userRepository = ...;
+
+  private RegisterUseCase registerUseCase;
+
+  @BeforeEach
+  void initUseCase() {
+    registerUseCase = new RegisterUseCase(userRepository);
+  }
+
+  @Test
+  void savedUserHasRegistrationDate() {
+    User user = new User("zaphod", "zaphod@mail.com");
+    User savedUser = registerUseCase.registerUser(user);
+    assertThat(savedUser.getRegistrationDate()).isNotNull();
+  }
+
+}
+```
+Se debe inicializar el objeto a probar y debido a que la inyeccion de dependencias necesita el objeto pasado por constructor creamos una instancia y la agregamos 
+
+ * Esta prueba unitaria depende de una base de datos para su ejecucion por lo que es necesario mockear el llamado a la base de datos  por su clara depencia con userRepository
 
 ## Wiki 📖
 
@@ -340,4 +443,6 @@ Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md
 ## Aprendizaje 🎁
 
 * Devco 📢
+
+
 
