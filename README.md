@@ -436,24 +436,32 @@ Se debe inicializar el objeto a probar y debido a que la inyeccion de dependenci
 * **Jeisson Palacio / jeapalac**
 
 
-## Pruebas de integracion 📄
+## Manejo de profile 📄
 
-Profile 
-Documentacion : https://dzone.com/articles/spring-boot-profiles-1
+Cada aplicación empresarial tiene muchos entornos, como:
+
+Dev | Test | Stage | Prod | UAT / Pre-Prod
+
+Cada entorno requiere una configuración específica para ellos. Por ejemplo, en DEV, no necesitamos verificar constantemente la consistencia de la base de datos. Mientras que en TEST y STAGE, necesitamos hacerlo. Estos entornos albergan configuraciones específicas llamadas Perfiles.
+
+Por lo que los profile se pueden colocar a nivel de clase o metodo
+
+@Profile("dev")
 
 
-Es necesario definir para las pruebas con base de datos embebida colocar el profile test
+para activar la configuracion en application.properties colocamos
 
-Esto puede ser colocado a nivel de metodo o nivel de clase 
-
-@Profile("test") o @Profile("dev") 
-
-Pueden llevar cualquier nombre
-
-cuando se va usar uno de los dos ambientes en el application.properties 
 
 spring.profiles.active=dev
 
+o 
+spring.profiles.active=test 
+
+
+En este caso se coloca test para la ejecucion de base de datos embebida  y para la ejecucion de la aplicacion usamos dev
+
+
+https://dzone.com/articles/spring-boot-profiles-1
 
 ## Aprendizaje 🎁
 
