@@ -467,5 +467,7 @@ https://dzone.com/articles/spring-boot-profiles-1
 
 * Devco 📢
 
+Nota : el docker compose debe ser levantado sin estar contectado a red de banco o token
+
 
 
