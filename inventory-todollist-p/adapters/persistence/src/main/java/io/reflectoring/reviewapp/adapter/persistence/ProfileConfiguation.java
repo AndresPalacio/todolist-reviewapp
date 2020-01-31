@@ -12,11 +12,10 @@ import org.springframework.data.jdbc.repository.config.JdbcConfiguration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-@Profile("dev")
+@Profile("test")
 @ComponentScan
 @EnableJdbcRepositories
-@Configuration
-public class PersistenceAdapterConfiguration extends JdbcConfiguration {
+public class ProfileConfiguation extends JdbcConfiguration {
 	
 	@Bean
 	NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
