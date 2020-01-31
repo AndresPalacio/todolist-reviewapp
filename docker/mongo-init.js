@@ -10,4 +10,6 @@ db.createUser(
         ]
     }
 
-)
+);
+db.auth("jeapalac", "jeapalac123")
+db.grantRolesToUser("jeapalac", [ { role: "readWrite", db: "test" } ])
