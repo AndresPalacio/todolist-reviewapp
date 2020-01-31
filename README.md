@@ -436,9 +436,24 @@ Se debe inicializar el objeto a probar y debido a que la inyeccion de dependenci
 * **Jeisson Palacio / jeapalac**
 
 
-## Licencia 📄
+## Pruebas de integracion 📄
 
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
+Profile 
+Documentacion : https://dzone.com/articles/spring-boot-profiles-1
+
+
+Es necesario definir para las pruebas con base de datos embebida colocar el profile test
+
+Esto puede ser colocado a nivel de metodo o nivel de clase 
+
+@Profile("test") o @Profile("dev") 
+
+Pueden llevar cualquier nombre
+
+cuando se va usar uno de los dos ambientes en el application.properties 
+
+spring.profiles.active=dev
+
 
 ## Aprendizaje 🎁
 
