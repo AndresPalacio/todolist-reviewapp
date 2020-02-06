@@ -17,13 +17,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import io.reflectoring.reviewapp.adapter.persistence.ItemPersistenceAdapter;
 import io.reflectoring.reviewapp.adapter.persistence.PersistenceAdapterConfiguration;
 import io.reflectoring.reviewapp.domain.Item;
-import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @ContextConfiguration(initializers = MongoDbContainerTest.MongoDbInitializer.class)
 @Import(PersistenceAdapterConfiguration.class)
 @ExtendWith(SpringExtension.class)
-@Slf4j
+
 public class MongoDbContainerTest {
 
 	@Autowired
@@ -47,7 +46,6 @@ public class MongoDbContainerTest {
     public static class MongoDbInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            log.info("Overrding Spring Properties for mongodb !!!!!!!!!");
 
             TestPropertyValues values = TestPropertyValues.of(
                     "spring.data.mongodb.host=" + mongoDbContainer.getContainerIpAddress(),

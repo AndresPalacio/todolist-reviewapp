@@ -1,5 +1,7 @@
 plugins {
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "io.freefair.lombok" version "4.1.6"
+    
 }
 
 allprojects {
@@ -9,7 +11,8 @@ allprojects {
 
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
-
+	apply plugin: "io.freefair.lombok"
+	
     repositories {
         jcenter()
     }
@@ -25,5 +28,7 @@ allprojects {
             mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.5.RELEASE")
         }
     }
+    
 
 }
+
